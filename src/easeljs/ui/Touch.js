@@ -70,9 +70,11 @@ this.createjs = this.createjs||{};
 	 * @static
 	 **/
 	Touch.isSupported = function() {
-		return !!(('ontouchstart' in window) // iOS & Android
-			|| (window.MSPointerEvent && window.navigator.msMaxTouchPoints > 0) // IE10
-			|| (window.PointerEvent && window.navigator.maxTouchPoints > 0)); // IE11+
+		var iOSAndroid = ('ontouchstart' in window);
+		var IE10 = (window.navigator['msPointerEnabled'] && window.navigator['msMaxTouchPoints'] > 0);
+		var IE11 = (window.navigator['pointerEnabled'] && window.navigator['maxTouchPoints'] > 0);
+		var Chrome70 = window.navigator['maxTouchPoints'] > 0;
+		return !!(iOSAndroid || IE10 || IE11 || Chrome70);
 	};
 
 	/**
@@ -99,7 +101,8 @@ this.createjs = this.createjs||{};
 		// note that in the future we may need to disable the standard mouse event model before adding
 		// these to prevent duplicate calls. It doesn't seem to be an issue with iOS devices though.
 		if ('ontouchstart' in window) { Touch._IOS_enable(stage); }
-		else if (window.PointerEvent || window.MSPointerEvent) { Touch._IE_enable(stage); }
+		else if (window.navigator['msPointerEnabled'] || window.navigator["pointerEnabled"]) { Touch._IE_enable(stage); }
+		else if (window.navigator['maxTouchPoints'] > 0) { Touch._Chrome_enable(stage); }
 		return true;
 	};
 
@@ -112,8 +115,9 @@ this.createjs = this.createjs||{};
 	Touch.disable = function(stage) {
 		if (!stage) { return; }
 		if ('ontouchstart' in window) { Touch._IOS_disable(stage); }
-		else if (window.PointerEvent || window.MSPointerEvent) { Touch._IE_disable(stage); }
-		
+		else if (window.navigator['msPointerEnabled'] || window.navigator["pointerEnabled"]) { Touch._IE_disable(stage); }
+		else if (window.navigator['maxTouchPoints'] > 0) { Touch._Chrome_disable(stage); }
+
 		delete stage.__touch;
 	};
 
@@ -253,6 +257,68 @@ this.createjs = this.createjs||{};
 				this._handleMove(stage, id, e, e.pageX, e.pageY);
 			} else if (type === "MSPointerUp" || type === "MSPointerCancel"
 					|| type === "pointerup" || type === "pointercancel") {
+				delete(ids[id]);
+				this._handleEnd(stage, id, e);
+			}
+		}
+	};
+
+	/**
+	 * @method _Chrome_enable
+	 * @protected
+	 * @param {Stage} stage
+	 * @static
+	 **/
+	Touch._Chrome_enable = function(stage) {
+		console.log('chrome')
+		var canvas = stage.canvas;
+		var f = stage.__touch.f = function(e) { Touch._Chrome_handleEvent(stage,e); };
+		canvas.addEventListener("pointerdown", f, false);
+		window.addEventListener("pointermove", f, false);
+		window.addEventListener("pointerup", f, false);
+		window.addEventListener("pointercancel", f, false);
+		if (stage.__touch.preventDefault) { canvas.style.touchAction = "none"; }
+		stage.__touch.activeIDs = {};
+	};
+
+	/**
+	 * @method _Chrome_disable
+	 * @protected
+	 * @param {Stage} stage
+	 * @static
+	 **/
+	Touch._Chrome_disable = function(stage) {
+		var f = stage.__touch.f;
+		window.removeEventListener("pointermove", f, false);
+		window.removeEventListener("pointerup", f, false);
+		window.removeEventListener("pointercancel", f, false);
+		if (stage.canvas) {
+			stage.canvas.removeEventListener("pointerdown", f, false);
+		}
+	};
+
+	/**
+	 * @method _Chrome_handleEvent
+	 * @param {Stage} stage
+	 * @param {Object} e The event to handle.
+	 * @protected
+	 * @static
+	 **/
+	Touch._Chrome_handleEvent = function(stage, e) {
+		if (!stage) { return; }
+		if (stage.__touch.preventDefault) { e.preventDefault && e.preventDefault(); }
+		var type = e.type;
+		var id = e.pointerId;
+		var ids = stage.__touch.activeIDs;
+
+		if (type == "pointerdown") {
+			if (e.srcElement != stage.canvas) { return; }
+			ids[id] = true;
+			this._handleStart(stage, id, e, e.pageX, e.pageY);
+		} else if (ids[id]) { // it's an id we're watching
+			if (type == "pointermove") {
+				this._handleMove(stage, id, e, e.pageX, e.pageY);
+			} else if (type == "pointerup" || type == "pointercancel") {
 				delete(ids[id]);
 				this._handleEnd(stage, id, e);
 			}
