@@ -4,14 +4,11 @@
   "description": "Modern build tooling for this createjs fork.",
   "main": "bundle.js",
   "scripts": {
-    "build": "esbuild --bundle bundle.js --minify --outfile=../lib/easeljs.min.js",
-    "build-unmin": "esbuild --bundle bundle.js --outfile=../lib/easeljs.js",
-    "build-NEXT": "esbuild --bundle bundle.js --minify --outfile=lib/easeljs-NEXT.min.js",
-    "build-NEXT-unmin": "esbuild --bundle bundle.js --outfile=lib/easeljs-NEXT.js"
+    "test": "echo \"No tests.\""
   },
   "author": "",
   "license": "ISC",
   "devDependencies": {
-    "esbuild": "0.24.2"
+    "uglify-js": "^3.19.3"
   }
 }
