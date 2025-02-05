@@ -6,13 +6,16 @@ identify:
 	@echo 'SRC_DIR = $(SRC_DIR)'
 	@echo 'DIST_DIR = $(DIST_DIR)'
 
+# list-src:
+	## Ideally build from source.
+	# @find ../src -name '*.js'
 list-src:
-	@find ../src -name '*.js'
+	@echo $(DIST_DIR)/easeljs.js
 
 build:
 	make build-uglifyjs
 
 build-uglifyjs:
-	@echo 'Making build (using uglifyjs)...'
+	# Making build (using uglifyjs)...
 	bash -c 'node_modules/uglify-js/bin/uglifyjs `make list-src` --output $(DIST_DIR)/$(DIST_NAME)'
-	@echo 'Build complete'
+	# Build complete.
