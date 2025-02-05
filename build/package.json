@@ -5,7 +5,9 @@
   "main": "bundle.js",
   "scripts": {
     "build": "esbuild --bundle bundle.js --minify --outfile=../lib/easeljs.min.js",
-    "build-NEXT": "esbuild --bundle bundle.js --minify --outfile=lib/easeljs-NEXT.min.js"
+    "build-unmin": "esbuild --bundle bundle.js --outfile=../lib/easeljs.js",
+    "build-NEXT": "esbuild --bundle bundle.js --minify --outfile=lib/easeljs-NEXT.min.js",
+    "build-NEXT-unmin": "esbuild --bundle bundle.js --outfile=lib/easeljs-NEXT.js"
   },
   "author": "",
   "license": "ISC",

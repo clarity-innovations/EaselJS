@@ -54,4 +54,4 @@ import '../src/easeljs/utils/WebGLInspector';
 // Version
 import '../src/easeljs/version';
 
-export default this.createjs;
+export default createjs;
