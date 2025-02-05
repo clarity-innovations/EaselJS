@@ -12,10 +12,15 @@ identify:
 list-src:
 	@echo $(DIST_DIR)/easeljs.js
 
-build:
-	make build-uglifyjs
+list-next-src:
+	@echo $(DIST_DIR)/easeljs-NEXT.js
 
-build-uglifyjs:
-	# Making build (using uglifyjs)...
+build:
+	# Making build...
 	bash -c 'node_modules/uglify-js/bin/uglifyjs `make list-src` --output $(DIST_DIR)/$(DIST_NAME)'
+	# Build complete.
+
+build-next:
+	# Making NEXT build...
+	bash -c 'node_modules/uglify-js/bin/uglifyjs `make list-next-src` --output $(DIST_DIR)/$(DIST_NAME)'
 	# Build complete.
