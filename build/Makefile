@@ -1,6 +1,8 @@
 SRC_DIR ?= ../src
 DIST_DIR ?= ../lib
-DIST_NAME ?= uglifyjs.min.js
+DIST_NAME ?= easeljs
+NEXT_DIST_NAME ?= easeljs-NEXT
+DIST_EXT ?= .min.js
 
 identify:
 	@echo 'SRC_DIR = $(SRC_DIR)'
@@ -17,10 +19,10 @@ list-next-src:
 
 build:
 	# Making build...
-	bash -c 'node_modules/uglify-js/bin/uglifyjs `make list-src` --output $(DIST_DIR)/$(DIST_NAME)'
+	bash -c 'node_modules/uglify-js/bin/uglifyjs `make list-src` --output $(DIST_DIR)/$(DIST_NAME)$(DIST_EXT)'
 	# Build complete.
 
 build-next:
 	# Making NEXT build...
-	bash -c 'node_modules/uglify-js/bin/uglifyjs `make list-next-src` --output $(DIST_DIR)/$(DIST_NAME)'
+	bash -c 'node_modules/uglify-js/bin/uglifyjs `make list-next-src` --output $(DIST_DIR)/$(DIST_NAME)$(DIST_EXT)'
 	# Build complete.
