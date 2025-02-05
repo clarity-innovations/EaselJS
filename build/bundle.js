@@ -53,3 +53,5 @@ import '../src/easeljs/utils/VideoBuffer';
 import '../src/easeljs/utils/WebGLInspector';
 // Version
 import '../src/easeljs/version';
+
+export default this.createjs;
