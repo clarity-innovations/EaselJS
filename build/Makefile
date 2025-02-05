@@ -1,7 +1,7 @@
 SRC_DIR ?= ../src
 DIST_DIR ?= ../lib
 DIST_NAME ?= easeljs
-NEXT_DIST_NAME ?= easeljs-NEXT
+NEXT_NAME ?= easeljs-NEXT
 DIST_EXT ?= .min.js
 
 identify:
@@ -24,5 +24,5 @@ build:
 
 build-next:
 	# Making NEXT build...
-	bash -c 'node_modules/uglify-js/bin/uglifyjs `make list-next-src` --output $(DIST_DIR)/$(DIST_NAME)$(DIST_EXT)'
+	bash -c 'node_modules/uglify-js/bin/uglifyjs `make list-next-src` --output $(DIST_DIR)/$(NEXT_NAME)$(DIST_EXT)'
 	# Build complete.
