@@ -4,8 +4,12 @@
   "description": "Modern build tooling for this createjs fork.",
   "main": "bundle.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "build": "esbuild --bundle bundle.js --minify --outfile=../lib/easeljs.min.js",
+    "build-NEXT": "esbuild --bundle bundle.js --minify --outfile=lib/easeljs-NEXT.min.js"
   },
   "author": "",
-  "license": "ISC"
+  "license": "ISC",
+  "devDependencies": {
+    "esbuild": "0.24.2"
+  }
 }
